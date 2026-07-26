@@ -12,48 +12,32 @@
     <style>
         /* ==================== CSS 变量：修改配色从这里入手 ==================== */
         :root {
-            /* 背景渐变 */
             --bg-gradient-start: #f0f2f5;
             --bg-gradient-end: #e8ecf1;
-
-            /* 卡片颜色 */
             --card-bg: #ffffff;
             --card-bg-hover: #fafbfc;
-
-            /* 强调色（用于图标背景、链接高亮等） */
             --accent: #5b6af0;
             --accent-light: #eef0ff;
             --accent-hover: #4a56d4;
-
-            /* 文字颜色 */
             --text-primary: #1a1a2e;
             --text-secondary: #5a6070;
             --text-muted: #9499a5;
-
-            /* 边框与阴影 */
             --card-border: #e8eaef;
             --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
-
-            /* 圆角 */
             --radius-sm: 10px;
             --radius-md: 16px;
             --radius-lg: 24px;
             --radius-full: 9999px;
-
-            /* 间距 */
             --spacing-xs: 6px;
             --spacing-sm: 12px;
             --spacing-md: 20px;
             --spacing-lg: 28px;
             --spacing-xl: 40px;
-
-            /* 过渡 */
             --transition-fast: 0.18s ease;
             --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* ==================== 全局重置 ==================== */
         *,
         *::before,
         *::after {
@@ -73,19 +57,19 @@
                 "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial,
                 sans-serif;
             background: linear-gradient(170deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            /* 改为 flex 居中，全屏高度 */
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: var(--spacing-lg);
+            align-items: center;
+            padding: 20px;
             color: var(--text-primary);
             line-height: 1.6;
-            /* 背景光斑装饰 */
             position: relative;
             overflow-x: hidden;
         }
 
-        /* ---- 背景光斑装饰 ---- */
+        /* 背景光斑 */
         body::before,
         body::after {
             content: "";
@@ -114,45 +98,48 @@
         }
 
         @keyframes floatBlob {
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-            25% {
-                transform: translate(40px, -30px) scale(1.06);
-            }
-            50% {
-                transform: translate(-20px, 20px) scale(0.94);
-            }
-            75% {
-                transform: translate(-35px, -15px) scale(1.04);
-            }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -30px) scale(1.06); }
+            50% { transform: translate(-20px, 20px) scale(0.94); }
+            75% { transform: translate(-35px, -15px) scale(1.04); }
         }
 
-        /* ==================== 主容器 ==================== */
+        /* ==================== 主容器：16:9 比例 ==================== */
         .main-container {
             position: relative;
             z-index: 1;
+            /* 关键：宽高比 16:9，最大宽度限制，内容超出可滚动 */
+            aspect-ratio: 16 / 9;
             width: 100%;
-            max-width: 620px;
+            max-width: 960px;          /* 16:9 下宽度960，高度540 */
             background: var(--card-bg);
             border-radius: var(--radius-lg);
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
-            padding: var(--spacing-xl) var(--spacing-lg);
-            margin-top: 20px;
-            margin-bottom: 40px;
+            /* 内部滚动，防止内容溢出破坏比例 */
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* 内边距稍微压缩，避免内容过于拥挤 */
+            padding: 28px 32px;
             animation: fadeInUp 0.7s ease both;
+            /* 自定义滚动条 */
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f1f5f9;
+        }
+        .main-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .main-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .main-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 8px;
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ==================== 个人信息区 ==================== */
@@ -161,39 +148,29 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-bottom: var(--spacing-xl);
+            margin-bottom: 24px;
         }
 
-        /* 头像容器 */
         .avatar-wrapper {
             position: relative;
-            width: 100px;
-            height: 100px;
-            margin-bottom: var(--spacing-md);
+            width: 80px;          /* 略微缩小以适应比例 */
+            height: 80px;
+            margin-bottom: 12px;
             flex-shrink: 0;
         }
         .avatar-wrapper::after {
             content: "";
             position: absolute;
-            inset: -6px;
+            inset: -4px;
             border-radius: 50%;
-            background: conic-gradient(from 0deg,
-                    var(--accent),
-                    #a78bfa,
-                    #f0abfc,
-                    var(--accent));
+            background: conic-gradient(from 0deg, var(--accent), #a78bfa, #f0abfc, var(--accent));
             mask: radial-gradient(farthest-side, transparent 62%, #000 64%);
             -webkit-mask: radial-gradient(farthest-side, transparent 62%, #000 64%);
             animation: avatarGlow 4s linear infinite;
             pointer-events: none;
         }
-        @keyframes avatarGlow {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes avatarGlow { to { transform: rotate(360deg); } }
 
-        /* 头像图片（请替换为您的头像URL） */
         .avatar-img {
             width: 100%;
             height: 100%;
@@ -205,10 +182,7 @@
             border: 3px solid #ffffff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             background: #e8eaef;
-            /* 默认占位背景色 */;
         }
-
-        /* 如果没有头像图片，使用首字母占位 */
         .avatar-placeholder {
             width: 100%;
             height: 100%;
@@ -218,63 +192,48 @@
             justify-content: center;
             background: var(--accent-light);
             color: var(--accent);
-            font-size: 36px;
+            font-size: 30px;
             font-weight: 700;
-            letter-spacing: 0.02em;
             position: relative;
             z-index: 1;
             border: 3px solid #ffffff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            user-select: none;
         }
 
-        /* 姓名 */
         .profile-name {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--text-primary);
             margin-bottom: 2px;
             letter-spacing: 0.01em;
         }
-
-        /* 一句话介绍 */
         .profile-bio {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            margin-bottom: var(--spacing-sm);
-            max-width: 380px;
+            margin-bottom: 8px;
+            max-width: 360px;
             line-height: 1.5;
         }
-
-        /* 标签组 */
         .tags-row {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: var(--spacing-xs);
-            margin-bottom: var(--spacing-md);
+            gap: 6px;
+            margin-bottom: 12px;
         }
         .tag {
-            display: inline-block;
-            padding: 4px 14px;
-            font-size: 0.8rem;
+            padding: 3px 12px;
+            font-size: 0.75rem;
             font-weight: 500;
             color: var(--accent);
             background: var(--accent-light);
             border-radius: var(--radius-full);
-            letter-spacing: 0.02em;
-            white-space: nowrap;
             transition: background var(--transition-fast), color var(--transition-fast);
         }
-        .tag:hover {
-            background: var(--accent);
-            color: #fff;
-        }
+        .tag:hover { background: var(--accent); color: #fff; }
 
-        /* 社交媒体图标行 */
         .social-links {
             display: flex;
-            gap: var(--spacing-sm);
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -282,160 +241,110 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 42px;
-            height: 42px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: #f5f6f9;
             color: var(--text-secondary);
-            font-size: 1.15rem;
+            font-size: 1rem;
             text-decoration: none;
             transition: all var(--transition-smooth);
-            position: relative;
         }
         .social-link:hover {
             background: var(--accent);
             color: #ffffff;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(91, 106, 240, 0.3);
-        }
-        .social-link:active {
-            transform: translateY(-1px) scale(0.96);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(91, 106, 240, 0.3);
         }
 
         /* ==================== 链接分类区 ==================== */
         .links-sections {
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-lg);
+            gap: 18px;
         }
-
-        /* 单个分类区块 */
-        .link-category {
-            /* 可在此添加分类级样式 */;
-        }
-
         .category-title {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: var(--text-muted);
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 8px;
             padding-left: 4px;
         }
-
-        /* 链接卡片网格 */
         .link-cards {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
-
-        /* 单张链接卡片 */
         .link-card {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            padding: 14px 16px;
+            gap: 10px;
+            padding: 10px 14px;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             text-decoration: none;
             color: var(--text-primary);
             transition: all var(--transition-smooth);
-            cursor: pointer;
-            position: relative;
             box-shadow: var(--card-shadow);
-            /* 初始状态 */;
         }
         .link-card:hover {
             background: var(--card-bg-hover);
             box-shadow: var(--card-shadow-hover);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             border-color: #d5d8e8;
         }
-        .link-card:active {
-            transform: translateY(0) scale(0.985);
-            transition: all 0.1s ease;
-        }
-
-        /* 卡片中的图标圆形容器 */
         .link-card-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             flex-shrink: 0;
-            transition: transform var(--transition-fast);
         }
-        .link-card:hover .link-card-icon {
-            transform: scale(1.08);
-        }
+        .link-card:hover .link-card-icon { transform: scale(1.05); }
 
-        /* 不同分类的图标配色（可自定义） */
-        .icon-social {
-            background: #eef2ff;
-            color: #5b6af0;
-        }
-        .icon-project {
-            background: #fdf2f8;
-            color: #db2777;
-        }
-        .icon-tool {
-            background: #ecfdf5;
-            color: #059669;
-        }
-        .icon-other {
-            background: #fff7ed;
-            color: #ea580c;
-        }
+        .icon-social { background: #eef2ff; color: #5b6af0; }
+        .icon-project { background: #fdf2f8; color: #db2777; }
+        .icon-tool { background: #ecfdf5; color: #059669; }
+        .icon-other { background: #fff7ed; color: #ea580c; }
 
-        /* 卡片文字区域 */
-        .link-card-text {
-            flex: 1;
-            min-width: 0;
-        }
+        .link-card-text { flex: 1; min-width: 0; }
         .link-card-title {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: 0.01em;
             line-height: 1.3;
         }
         .link-card-desc {
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            margin-top: 1px;
-            line-height: 1.4;
-            /* 单行溢出省略 */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
-        /* 卡片右侧箭头 */
         .link-card-arrow {
             color: #c5c9d4;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             flex-shrink: 0;
             transition: all var(--transition-smooth);
         }
         .link-card:hover .link-card-arrow {
             color: var(--accent);
-            transform: translateX(3px);
+            transform: translateX(2px);
         }
 
         /* ==================== 页脚 ==================== */
         .footer {
             text-align: center;
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-md);
+            margin-top: 20px;
+            padding-top: 12px;
             border-top: 1px solid var(--card-border);
             color: var(--text-muted);
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             letter-spacing: 0.03em;
         }
         .footer .heart {
@@ -444,397 +353,123 @@
             animation: heartbeat 1.4s ease infinite;
         }
         @keyframes heartbeat {
-            0%,
-            100%,
-            50% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(1.2);
-            }
-            75% {
-                transform: scale(0.95);
-            }
+            0%, 100%, 50% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            75% { transform: scale(0.95); }
         }
 
-        /* ==================== 响应式设计 ==================== */
-        @media (max-width: 640px) {
-            body {
-                padding: var(--spacing-sm);
-                align-items: flex-start;
-            }
+        /* ==================== 响应式：小屏幕调整为自适应比例 ==================== */
+        @media (max-width: 768px) {
             .main-container {
-                padding: var(--spacing-lg) var(--spacing-md);
-                margin-top: 8px;
-                margin-bottom: 20px;
+                /* 在手机上取消固定比例，改为自动高度，宽度撑满 */
+                aspect-ratio: auto;
+                max-width: 100%;
+                height: auto;
+                padding: 20px 16px;
                 border-radius: var(--radius-md);
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            }
+            body {
+                padding: 12px;
+                align-items: flex-start;  /* 靠上对齐，方便滚动 */
             }
             .avatar-wrapper {
-                width: 80px;
-                height: 80px;
-                margin-bottom: var(--spacing-sm);
+                width: 64px;
+                height: 64px;
             }
-            .avatar-wrapper::after {
-                inset: -4px;
-            }
-            .profile-name {
-                font-size: 1.35rem;
-            }
-            .profile-bio {
-                font-size: 0.85rem;
-                max-width: 280px;
-            }
-            .link-card {
-                padding: 12px 14px;
-                gap: 10px;
-                border-radius: var(--radius-sm);
-            }
-            .link-card-icon {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
-                border-radius: 8px;
-            }
-            .link-card-title {
-                font-size: 0.9rem;
-            }
-            .link-card-desc {
-                font-size: 0.75rem;
-            }
-            .link-card-arrow {
-                font-size: 0.7rem;
-            }
-            .social-link {
-                width: 38px;
-                height: 38px;
-                font-size: 1rem;
-            }
-            .category-title {
-                font-size: 0.78rem;
-            }
-            body::before {
-                width: 250px;
-                height: 250px;
-                top: -80px;
-                left: -60px;
-            }
-            body::after {
-                width: 200px;
-                height: 200px;
-                bottom: -60px;
-                right: -50px;
-            }
+            .profile-name { font-size: 1.2rem; }
+            .profile-bio { font-size: 0.8rem; }
         }
 
         @media (max-width: 380px) {
-            .main-container {
-                padding: 16px 12px;
-            }
-            .link-card {
-                padding: 10px 12px;
-                gap: 8px;
-            }
-            .link-card-icon {
-                width: 34px;
-                height: 34px;
-                font-size: 0.9rem;
-                border-radius: 7px;
-            }
-            .link-card-desc {
-                display: none;
-                /* 超小屏幕隐藏描述 */;
-            }
-            .profile-bio {
-                font-size: 0.8rem;
-                max-width: 240px;
-            }
-        }
-
-        /* ==================== 打印样式 ==================== */
-        @media print {
-            body {
-                background: #fff;
-            }
-            .main-container {
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
-            body::before,
-            body::after {
-                display: none;
-            }
-        }
-
-        /* ==================== 减少动画偏好 ==================== */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+            .link-card-desc { display: none; }
         }
     </style>
 </head>
 <body>
-
-    <!-- ==================== 主容器 ==================== -->
     <main class="main-container">
 
-        <!-- ========== 个人信息区（请修改为您的信息） ========== -->
+        <!-- 个人信息区（请修改为你的信息） -->
         <section class="profile-section">
-
-            <!-- 头像：两种方式二选一 -->
-            <!-- 方式1：使用图片头像（推荐），替换 src 为您的头像图片URL -->
-            <!--
-      <div class="avatar-wrapper">
-        <img
-          class="avatar-img"
-          src="https://avatars.githubusercontent.com/u/你的GitHub用户名"
-          alt="头像"
-          loading="eager"
-        />
-      </div>
-      -->
-
-            <!-- 方式2：使用首字母占位头像（如果没有图片，使用这个） -->
+            <!-- 头像占位 -->
             <div class="avatar-wrapper">
                 <div class="avatar-placeholder" aria-label="头像占位">我</div>
             </div>
-
-            <!-- 姓名 -->
             <h1 class="profile-name">你的名字</h1>
-
-            <!-- 一句话介绍 -->
-            <p class="profile-bio">
-                开发者 · 设计师 · 终身学习者<br>用代码构建美好事物。
-            </p>
-
-            <!-- 个人标签 -->
+            <p class="profile-bio">开发者 · 设计师 · 终身学习者<br>用代码构建美好事物。</p>
             <div class="tags-row">
                 <span class="tag">前端开发</span>
                 <span class="tag">开源爱好者</span>
                 <span class="tag">摄影</span>
                 <span class="tag">阅读</span>
             </div>
-
-            <!-- 社交媒体图标（替换 href 和图标 class） -->
             <nav class="social-links" aria-label="社交媒体链接">
-                <!-- GitHub -->
-                <a href="https://github.com/你的用户名" class="social-link"
-                target="_blank" rel="noopener noreferrer"
-                title="GitHub" aria-label="GitHub">
-                <i class="fa-brands fa-github"></i>
-            </a>
-            <!-- 邮箱 -->
-            <a href="mailto:your-email@example.com" class="social-link"
-            title="邮箱" aria-label="发送邮件">
-            <i class="fa-solid fa-envelope"></i>
-        </a>
-        <!-- Twitter / X -->
-        <a href="https://twitter.com/你的用户名" class="social-link"
-        target="_blank" rel="noopener noreferrer"
-        title="Twitter" aria-label="Twitter">
-        <i class="fa-brands fa-x-twitter"></i>
-    </a>
-    <!-- 博客 / 网站 -->
-    <a href="https://你的博客地址" class="social-link"
-    target="_blank" rel="noopener noreferrer"
-    title="个人博客" aria-label="博客">
-    <i class="fa-solid fa-blog"></i>
-</a>
-<!-- 可以继续添加更多社交图标... -->
-</nav>
-</section>
+                <a href="https://github.com/你的用户名" class="social-link" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="mailto:your-email@example.com" class="social-link" title="邮箱"><i class="fa-solid fa-envelope"></i></a>
+                <a href="https://twitter.com/你的用户名" class="social-link" target="_blank" rel="noopener noreferrer" title="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://你的博客地址" class="social-link" target="_blank" rel="noopener noreferrer" title="博客"><i class="fa-solid fa-blog"></i></a>
+            </nav>
+        </section>
 
-<!-- ========== 链接卡片区 ========== -->
-<div class="links-sections">
+        <!-- 链接卡片区 -->
+        <div class="links-sections">
+            <section class="link-category">
+                <h2 class="category-title"><i class="fa-solid fa-share-nodes"></i>&ensp;社交平台</h2>
+                <div class="link-cards">
+                    <a href="https://github.com/你的用户名" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-social"><i class="fa-brands fa-github"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">GitHub</span><span class="link-card-desc">我的开源项目与代码仓库</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                    <a href="https://linkedin.com/in/你的用户名" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-social"><i class="fa-brands fa-linkedin-in"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">LinkedIn</span><span class="link-card-desc">职业档案与人脉网络</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                    <a href="https://weibo.com/你的用户名" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-social"><i class="fa-brands fa-weibo"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">微博</span><span class="link-card-desc">日常动态与碎碎念</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                </div>
+            </section>
 
-    <!-- 分类1：社交平台 -->
-    <section class="link-category">
-        <h2 class="category-title">
-            <i class="fa-solid fa-share-nodes"></i>&ensp;社交平台
-        </h2>
-        <div class="link-cards">
+            <section class="link-category">
+                <h2 class="category-title"><i class="fa-solid fa-rocket"></i>&ensp;我的项目</h2>
+                <div class="link-cards">
+                    <a href="https://github.com/你的用户名/项目名" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-project"><i class="fa-solid fa-code"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">项目名称一</span><span class="link-card-desc">简短描述这个项目的亮点</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                    <a href="https://你的项目链接" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-project"><i class="fa-solid fa-palette"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">项目名称二</span><span class="link-card-desc">另一个值得展示的作品</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                </div>
+            </section>
 
-            <!-- 卡片示例1：GitHub -->
-            <a href="https://github.com/你的用户名"
-            class="link-card"
-            target="_blank" rel="noopener noreferrer">
-            <span class="link-card-icon icon-social">
-                <i class="fa-brands fa-github"></i>
-            </span>
-            <span class="link-card-text">
-                <span class="link-card-title">GitHub</span>
-                <span class="link-card-desc">我的开源项目与代码仓库</span>
-            </span>
-            <span class="link-card-arrow">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </span>
-        </a>
-
-        <!-- 卡片示例2：LinkedIn -->
-        <a href="https://linkedin.com/in/你的用户名"
-        class="link-card"
-        target="_blank" rel="noopener noreferrer">
-        <span class="link-card-icon icon-social">
-            <i class="fa-brands fa-linkedin-in"></i>
-        </span>
-        <span class="link-card-text">
-            <span class="link-card-title">LinkedIn</span>
-            <span class="link-card-desc">职业档案与人脉网络</span>
-        </span>
-        <span class="link-card-arrow">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </span>
-    </a>
-
-    <!-- 卡片示例3：微博 -->
-    <a href="https://weibo.com/你的用户名"
-    class="link-card"
-    target="_blank" rel="noopener noreferrer">
-    <span class="link-card-icon icon-social">
-        <i class="fa-brands fa-weibo"></i>
-    </span>
-    <span class="link-card-text">
-        <span class="link-card-title">微博</span>
-        <span class="link-card-desc">日常动态与碎碎念</span>
-    </span>
-    <span class="link-card-arrow">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-    </span>
-</a>
-
-<!-- 可按需添加更多社交卡片... -->
-</div>
-</section>
-
-<!-- 分类2：我的项目 -->
-<section class="link-category">
-    <h2 class="category-title">
-        <i class="fa-solid fa-rocket"></i>&ensp;我的项目
-    </h2>
-    <div class="link-cards">
-
-        <!-- 项目卡片1 -->
-        <a href="https://github.com/你的用户名/项目名"
-        class="link-card"
-        target="_blank" rel="noopener noreferrer">
-        <span class="link-card-icon icon-project">
-            <i class="fa-solid fa-code"></i>
-        </span>
-        <span class="link-card-text">
-            <span class="link-card-title">项目名称一</span>
-            <span class="link-card-desc">简短描述这个项目的亮点</span>
-        </span>
-        <span class="link-card-arrow">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </span>
-    </a>
-
-    <!-- 项目卡片2 -->
-    <a href="https://你的项目链接"
-    class="link-card"
-    target="_blank" rel="noopener noreferrer">
-    <span class="link-card-icon icon-project">
-        <i class="fa-solid fa-palette"></i>
-    </span>
-    <span class="link-card-text">
-        <span class="link-card-title">项目名称二</span>
-        <span class="link-card-desc">另一个值得展示的作品</span>
-    </span>
-    <span class="link-card-arrow">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-    </span>
-</a>
-
-<!-- 可按需添加更多项目卡片... -->
-</div>
-</section>
-
-<!-- 分类3：常用工具 / 资源 -->
-<section class="link-category">
-    <h2 class="category-title">
-        <i class="fa-solid fa-toolbox"></i>&ensp;常用工具
-    </h2>
-    <div class="link-cards">
-
-        <!-- 工具卡片1 -->
-        <a href="https://example.com"
-        class="link-card"
-        target="_blank" rel="noopener noreferrer">
-        <span class="link-card-icon icon-tool">
-            <i class="fa-solid fa-wrench"></i>
-        </span>
-        <span class="link-card-text">
-            <span class="link-card-title">工具名称一</span>
-            <span class="link-card-desc">我常用的效率工具推荐</span>
-        </span>
-        <span class="link-card-arrow">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        </span>
-    </a>
-
-    <!-- 工具卡片2 -->
-    <a href="https://example.com"
-    class="link-card"
-    target="_blank" rel="noopener noreferrer">
-    <span class="link-card-icon icon-tool">
-        <i class="fa-solid fa-bookmark"></i>
-    </span>
-    <span class="link-card-text">
-        <span class="link-card-title">工具名称二</span>
-        <span class="link-card-desc">收藏的实用在线资源</span>
-    </span>
-    <span class="link-card-arrow">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-    </span>
-</a>
-
-<!-- 可按需添加更多工具卡片... -->
-</div>
-</section>
-
-<!--
-      ==================== 添加新分类模板 ====================
-      复制以下代码块，修改分类标题和卡片内容即可：
-
-      <section class="link-category">
-        <h2 class="category-title">
-          <i class="fa-solid fa-图标名"></i>&ensp;分类名称
-        </h2>
-        <div class="link-cards">
-          <a href="链接地址" class="link-card" target="_blank" rel="noopener noreferrer">
-            <span class="link-card-icon icon-other">
-              <i class="fa-solid fa-图标名"></i>
-            </span>
-            <span class="link-card-text">
-              <span class="link-card-title">标题</span>
-              <span class="link-card-desc">描述文字</span>
-            </span>
-            <span class="link-card-arrow">
-              <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </span>
-          </a>
+            <section class="link-category">
+                <h2 class="category-title"><i class="fa-solid fa-toolbox"></i>&ensp;常用工具</h2>
+                <div class="link-cards">
+                    <a href="https://example.com" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-tool"><i class="fa-solid fa-wrench"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">工具名称一</span><span class="link-card-desc">我常用的效率工具推荐</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                    <a href="https://example.com" class="link-card" target="_blank" rel="noopener noreferrer">
+                        <span class="link-card-icon icon-tool"><i class="fa-solid fa-bookmark"></i></span>
+                        <span class="link-card-text"><span class="link-card-title">工具名称二</span><span class="link-card-desc">收藏的实用在线资源</span></span>
+                        <span class="link-card-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+                </div>
+            </section>
         </div>
-      </section>
 
-      可选图标背景色类：icon-social / icon-project / icon-tool / icon-other
-      或在 CSS 中自定义新的图标背景色类。
-      ==================== 添加新分类模板结束 ====================
-    -->
-
-</div>
-
-<!-- ========== 页脚 ========== -->
-<footer class="footer">
-    <p>用 <span class="heart">♥</span> 打造 · 持续更新中</p>
-    <p style="margin-top:2px;">&copy; 2026 你的名字</p>
-</footer>
-
-</main>
-
+        <footer class="footer">
+            <p>用 <span class="heart">♥</span> 打造 · 持续更新中</p>
+            <p style="margin-top:2px;">&copy; 2026 你的名字</p>
+        </footer>
+    </main>
 </body>
 </html>
