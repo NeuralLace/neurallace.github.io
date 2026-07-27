@@ -162,7 +162,6 @@
             z-index: 2;
         }
 
-        /* 左侧面板微妙纹理 */
         .left-panel::before {
             content: '';
             position: absolute;
@@ -179,7 +178,7 @@
             z-index: 1;
         }
 
-        /* 头像 */
+        /* 头像容器（保留光晕动画） */
         .avatar-wrapper {
             position: relative;
             margin-bottom: clamp(12px, 2.5%, 20px);
@@ -240,54 +239,28 @@
             }
         }
 
-        .avatar {
+        /* 头像图片样式（替换原来的 .avatar） */
+        .avatar-img {
             width: clamp(70px, 14vw, 100px);
             height: clamp(70px, 14vw, 100px);
             border-radius: 50%;
-            background: linear-gradient(135deg, #e8f9f9 0%, #d0f5f5 30%, #b8f0f0 60%, #c5f3f3 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(28px, 5.5vw, 42px);
-            color: #009999;
+            object-fit: cover;
             position: relative;
             z-index: 2;
             border: 3px solid #ffffff;
             box-shadow:
                 0 4px 16px rgba(0, 0, 0, 0.08),
                 inset 0 1px 2px rgba(255, 255, 255, 0.6);
-            transition: all 0.4s var(--transition-apple);
-            cursor: default;
-            user-select: none;
-            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+            display: block;
         }
 
-        .avatar::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 35% 30%,
-                    rgba(255, 255, 255, 0.5) 0%,
-                    transparent 50%);
-            pointer-events: none;
-        }
-
-        .avatar:hover {
+        .avatar-img:hover {
             transform: scale(1.04);
             box-shadow:
                 0 8px 28px rgba(0, 0, 0, 0.12),
                 0 0 0 8px rgba(0, 255, 255, 0.12),
                 inset 0 1px 2px rgba(255, 255, 255, 0.6);
-        }
-
-        .avatar-initial {
-            position: relative;
-            z-index: 3;
-            font-weight: 600;
-            letter-spacing: -0.02em;
         }
 
         /* 姓名 */
@@ -392,7 +365,6 @@
             transition: all 0.15s var(--transition-smooth);
         }
 
-        /* 社交按钮光晕 */
         .social-btn::after {
             content: '';
             position: absolute;
@@ -455,7 +427,6 @@
             }
         }
 
-        /* 卡片顶部彩色线 */
         .content-card::before {
             content: '';
             position: absolute;
@@ -494,7 +465,6 @@
             background: #fdfefe;
         }
 
-        /* 卡片头部 */
         .card-header {
             display: flex;
             align-items: center;
@@ -537,7 +507,6 @@
             color: #007a7a;
         }
 
-        /* 项目列表 */
         .project-list {
             list-style: none;
             display: flex;
@@ -625,7 +594,6 @@
             color: #5a5a60;
         }
 
-        /* 标签 */
         .tag-row {
             display: flex;
             gap: 6px;
@@ -660,6 +628,18 @@
             border-color: rgba(0, 255, 255, 0.2);
         }
 
+        /* 通用动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* ========== 响应式调整 ========== */
         @media (max-width: 900px) {
             .main-container {
@@ -691,10 +671,9 @@
                 margin-bottom: 0;
                 margin-right: 8px;
             }
-            .avatar {
+            .avatar-img {
                 width: 55px;
                 height: 55px;
-                font-size: 22px;
             }
             .avatar-ring {
                 inset: -3px;
@@ -760,10 +739,9 @@
                 padding: 14px 10px;
                 gap: 6px;
             }
-            .avatar {
+            .avatar-img {
                 width: 44px;
                 height: 44px;
-                font-size: 18px;
                 border-width: 2px;
             }
             .avatar-ring {
@@ -826,35 +804,25 @@
 </head>
 <body>
 
-    <!-- 主容器 - 16:9 比例 -->
     <div class="main-container">
 
-        <!-- ========== 左侧面板：个人信息 ========== -->
+        <!-- 左侧个人信息栏 -->
         <aside class="left-panel">
-            <!-- 头像 -->
             <div class="avatar-wrapper">
                 <div class="avatar-ring"></div>
                 <div class="avatar-outer-glow"></div>
-                <div class="avatar">
-                    <span class="avatar-initial">Y</span>
-                </div>
+                <!-- 将原来的字母头像替换为图片 -->
+                <img class="avatar-img" src="avatar.jpg" alt="我的头像" />
             </div>
 
-            <!-- 姓名 -->
             <h1 class="name">Your Name</h1>
-
-            <!-- 头衔标签 -->
             <span class="title-tag">全栈开发者 · 开源爱好者</span>
-
-            <!-- 简短介绍 -->
             <p class="bio">
                 热爱技术，专注于构建优雅的<br>Web 应用与开源工具。
             </p>
 
-            <!-- 分割线 -->
             <div class="divider"></div>
 
-            <!-- 社交媒体 -->
             <div class="social-links">
                 <a href="https://github.com" target="_blank" rel="noopener" class="social-btn" title="GitHub" aria-label="GitHub">
                     <i class="fa-brands fa-github"></i>
@@ -874,10 +842,9 @@
             </div>
         </aside>
 
-        <!-- ========== 右侧面板：三大分区 ========== -->
+        <!-- 右侧三大分区 -->
         <main class="right-panel">
-
-            <!-- 卡片1：开源作品 -->
+            <!-- 开源作品 -->
             <section class="content-card">
                 <div class="card-header">
                     <div class="card-icon-circle">
@@ -915,7 +882,7 @@
                 </div>
             </section>
 
-            <!-- 卡片2：视频资源 -->
+            <!-- 视频资源 -->
             <section class="content-card">
                 <div class="card-header">
                     <div class="card-icon-circle">
@@ -953,7 +920,7 @@
                 </div>
             </section>
 
-            <!-- 卡片3：精品工具 -->
+            <!-- 精品工具 -->
             <section class="content-card">
                 <div class="card-header">
                     <div class="card-icon-circle">
@@ -990,7 +957,6 @@
                     <span class="mini-tag">免费</span>
                 </div>
             </section>
-
         </main>
     </div>
 
