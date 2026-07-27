@@ -70,7 +70,6 @@
             }
         }
 
-        /* 背景装饰光点 */
         body::before {
             content: '';
             position: fixed;
@@ -115,7 +114,6 @@
             }
         }
 
-        /* 主容器 - 16:9 */
         .main-container {
             position: relative;
             z-index: 1;
@@ -178,7 +176,6 @@
             z-index: 1;
         }
 
-        /* 头像容器（保留光晕动画） */
         .avatar-wrapper {
             position: relative;
             margin-bottom: clamp(12px, 2.5%, 20px);
@@ -239,7 +236,6 @@
             }
         }
 
-        /* 头像图片样式（替换原来的 .avatar） */
         .avatar-img {
             width: clamp(70px, 14vw, 100px);
             height: clamp(70px, 14vw, 100px);
@@ -263,7 +259,6 @@
                 inset 0 1px 2px rgba(255, 255, 255, 0.6);
         }
 
-        /* 姓名 */
         .name {
             font-size: clamp(16px, 2.8vw, 22px);
             font-weight: 700;
@@ -274,7 +269,6 @@
             text-align: center;
         }
 
-        /* 头衔 */
         .title-tag {
             display: inline-block;
             font-size: clamp(11px, 1.7vw, 13px);
@@ -298,7 +292,6 @@
             box-shadow: 0 2px 10px rgba(0, 255, 255, 0.15);
         }
 
-        /* 简短介绍 */
         .bio {
             font-size: clamp(10px, 1.5vw, 12px);
             color: var(--text-secondary);
@@ -309,7 +302,6 @@
             max-width: 90%;
         }
 
-        /* 分割线 */
         .divider {
             width: 50%;
             height: 1px;
@@ -379,6 +371,24 @@
             box-shadow: 0 0 20px 4px rgba(0, 255, 255, 0.2);
         }
 
+        /* 小红书专属配色 */
+        .xiaohongshu-btn {
+            color: #ff2442;
+        }
+
+        .xiaohongshu-btn:hover {
+            color: #d91a33;
+            border-color: rgba(255, 36, 66, 0.55);
+            box-shadow:
+                0 8px 22px rgba(255, 36, 66, 0.22),
+                0 3px 8px rgba(0, 0, 0, 0.06);
+            background: #fff5f5;
+        }
+
+        .xiaohongshu-btn:hover::after {
+            box-shadow: 0 0 20px 4px rgba(255, 36, 66, 0.25);
+        }
+
         /* ========== 右侧面板 (75%) ========== */
         .right-panel {
             width: 75%;
@@ -389,7 +399,6 @@
             z-index: 2;
         }
 
-        /* 内容卡片 */
         .content-card {
             flex: 1;
             background: #ffffff;
@@ -628,7 +637,6 @@
             border-color: rgba(0, 255, 255, 0.2);
         }
 
-        /* 通用动画 */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -811,7 +819,6 @@
             <div class="avatar-wrapper">
                 <div class="avatar-ring"></div>
                 <div class="avatar-outer-glow"></div>
-                <!-- 将原来的字母头像替换为图片 -->
                 <img class="avatar-img" src="avatar.jpg" alt="我的头像" />
             </div>
 
@@ -823,21 +830,19 @@
 
             <div class="divider"></div>
 
+            <!-- 社交媒体：仅保留 GitHub、哔哩哔哩、小红书 -->
             <div class="social-links">
-                <a href="https://github.com" target="_blank" rel="noopener" class="social-btn" title="GitHub" aria-label="GitHub">
+                <!-- GitHub -->
+                <a href="https://github.com/NeuralLace" target="_blank" rel="noopener" class="social-btn" title="GitHub" aria-label="GitHub">
                     <i class="fa-brands fa-github"></i>
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener" class="social-btn" title="Twitter / X" aria-label="Twitter">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="https://bilibili.com" target="_blank" rel="noopener" class="social-btn" title="Bilibili" aria-label="Bilibili">
+                <!-- 哔哩哔哩 -->
+                <a href="https://space.bilibili.com/10259940" target="_blank" rel="noopener" class="social-btn" title="哔哩哔哩" aria-label="Bilibili">
                     <i class="fa-brands fa-bilibili"></i>
                 </a>
-                <a href="mailto:hello@example.com" class="social-btn" title="Email" aria-label="Email">
-                    <i class="fa-solid fa-envelope"></i>
-                </a>
-                <a href="#" class="social-btn" title="个人博客" aria-label="Blog">
-                    <i class="fa-solid fa-globe"></i>
+                <!-- 小红书（使用红色爱心图标） -->
+                <a href="https://www.xiaohongshu.com/user/profile/669a02050000000024020616" target="_blank" rel="noopener" class="social-btn xiaohongshu-btn" title="小红书" aria-label="小红书">
+                    <i class="fa-solid fa-heart"></i>
                 </a>
             </div>
         </aside>
